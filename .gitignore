@@ -1,0 +1,6 @@
+/.settings/
+/manifest.xml
+.idea
+*.iml
+*.ipr
+*.iws
