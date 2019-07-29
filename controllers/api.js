@@ -25,33 +25,36 @@ module.exports = {
         }
     },
 
-    'GET /api/notices': async (ctx, next) => {
-        console.log(`查询所有的通知`);
+    'GET /api/notices':async (ctx, next) =>{
+        console.log(`查询所有的通知开始`);
+        // var a = await Notices.getNotices();
+        // console.log(`查询结果:`+JSON.stringify(a));
         ctx.rest({
-            notices: Notices.getNotices()
+            notices: await Notices.getNotices()
         });
+        console.log(`查询所有的通知结束`);
     },
 
 
     'GET /api/notices:id': async (ctx, next) => {
         console.log(`查询一个通知`);
         ctx.rest({
-            notices: Notices.getNotice()
+            notices: await Notices.getNotice()
         });
     },
 
     'POST /api/notices': async (ctx, next) => {
-        var p = Notices.createNotice(ctx.request.body.name, ctx.request.body.manufacturer, parseFloat(ctx.request.body.price));
+        var p = await Notices.createNotice(ctx.request.body.name, ctx.request.body.manufacturer, parseFloat(ctx.request.body.price));
         ctx.rest(p);
     },
 
     'DELETE /api/notices/:id': async (ctx, next) => {
-        console.log(`delete product ${ctx.params.id}...`);
-        var p = Notices.deleteNotice(ctx.params.id);
+        console.log(`delete notices ${ctx.params.id}...`);
+        var p = await Notices.deleteNotice(ctx.params.id);
         if (p) {
             ctx.rest(p);
         } else {
-            throw new APIError('product:not_found', 'product not found by id.');
+            throw new APIError('notice:not_found', 'notice not found by id.');
         }
     }
 };

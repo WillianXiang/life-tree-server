@@ -9,18 +9,23 @@ var Model = db.defineModel('Notices', {
   gmId: seq.INTEGER(10),
 });
 
-// Model.sync();
+// Model.sync({
+//   force: true  // 强制同步，先删除表，然后新建
+// });
 
 // 导出模型对象
 // module.exports = Model;
 module.exports = {
-  getNotices: () => {
-    var notices =  Model.findAll();
-    console.log(`find ${notices.length} notices:`);
+  getNotices: async() => {
+    const a = await Model.findAll({
+
+    });
+    console.log("a"+ JSON.stringify(a));
+    return a;
   },
 
-  getNotice: (id) => {
-    var notices = Model.findAll({
+  getNotice: async(id) => {
+    const notices = await Model.findAll({
       where: {
         gmId: '10086'
       }
@@ -32,22 +37,27 @@ module.exports = {
     return null;
   },
 
-  createNotice: (name, manufacturer, price) => {
-    Model.create({
+  createNotice: async(name, manufacturer, price) => {
+    const data = await Model.create({
       content: '我是公告内容。',
       title: '系统公告的标题',
       gmId: '10086',
       status: 0,
       expireDate: 1527396599123,
       startDate: Date.now()
-    }).then((data) => {
-      console.log(`公告发布成功:`+ JSON.stringify(data));
-      return data;
     });
+    console.log(`删除公告:`+ JSON.stringify(data));
+    return data
   },
 
-  deleteNotice: (id) => {
+  deleteNotice: async(id) => {
     console.log(`删除公告:`+ id);
-    return null;
+    const deleteId = await Model.destroy({
+      where:{
+        id: id
+      }
+    });
+    console.log(`删除公告结果:`+ deleteId);
+    return deleteId;
   }
 };
